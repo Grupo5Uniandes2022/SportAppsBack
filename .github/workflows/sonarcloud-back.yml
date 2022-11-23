@@ -1,0 +1,47 @@
+name: SonarCloud Backend analysis
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Cache node modules
+        id: node-cache # Id del cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true' 
+        run: npm install
+      - name: Run Build command
+        run: npm run build
+      - name: Run Unit tests
+        run: npm run test
+      - name: Run Coverage
+        run: npm run test:cov
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args:
+            -Dsonar.projectKey=Grupo5Uniandes2022_symmetrical-octo-parakeet
+            -Dsonar.organization=grupo5uniandes2022
+            -Dsonar.javascript.lcov.reportPaths=./coverage/clover.xml
+            -Dsonar.typescript.tsconfigPaths=./tsconfig.json

@@ -1,0 +1,39 @@
+name: CI Back-End
+
+on: # ¿Cuando ejecutar?
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning' 
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.17.0
+      - name: Cache node modules
+        id: node-cache # Id del cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true' 
+        run: npm install
+      - name: Run Build command
+        run: npm run build
+      - name: Run Unit tests
+        run: npm run test

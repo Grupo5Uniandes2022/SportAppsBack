@@ -1,0 +1,102 @@
+name: CD Back-End
+
+on: # ¿Cuando ejecutar?
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning' 
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+env:
+  PROJECT_ID: ${{ secrets.GET_GKE_CRED_PROJECT }}
+  GAR_LOCATION: ${{ secrets.GET_GKE_CRED_CLUSTER_LOCATION }}
+  GKE_CLUSTER: ${{ secrets.GET_GKE_CRED_CLUSTER_NAME }}
+  GKE_ZONE: ${{ secrets.GET_GKE_CRED_CLUSTER_ZONE_LOCATION }}
+  DEPLOYMENT_NAME: user-deployment
+  REPOSITORY: users-sportsapp
+  IMAGE: nest-app
+  NAMESPACE: sportapps-ns
+jobs:
+  deploy:
+    name: Continuous Deployment
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.17.0
+      - name: Cache node modules
+        id: node-cache # Id del cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true' 
+        run: npm install
+      - name: Run Build command
+        run: npm run build
+      #- name: Run Unit tests
+      #  run: npm run test
+      # Alternative option - authentication via credentials json
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GET_GKE_CRED_SA_KEY_JSON }}'
+
+      # Setup gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+
+      # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication (https://cloud.google.com/artifact-registry/docs/docker/authentication)
+      - name: Docker configuration
+        run: |-
+          gcloud --quiet auth configure-docker $GAR_LOCATION-docker.pkg.dev
+
+      # Get the GKE credentials so we can deploy to the cluster
+      - name: Set up GKE credentials
+        run: |-
+          gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+
+      # Build the Docker image
+      - name: Build
+        working-directory: ./backend
+        run: |-
+          ls ./dist
+          pwd
+          docker build \
+            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" \
+            .
+
+      # Push the Docker image to Google Artifact Registry
+      - name: Publish
+        run: |-
+          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
+
+      # Set up kustomize
+      - name: Set up Kustomize
+        working-directory: ./backend/gke/
+        run: |-
+          curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+          chmod u+x ./kustomize
+
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy
+        working-directory: ./backend/gke/
+        run: |-
+          # replacing the image name in the k8s template
+          ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
+          ./kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/$DEPLOYMENT_NAME -n $NAMESPACE
+          kubectl get services -o wide -n $NAMESPACE
