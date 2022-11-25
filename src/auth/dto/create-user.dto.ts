@@ -1,11 +1,27 @@
 /* istanbul ignore file */
-import { IsString, IsEmail, MinLength, MaxLength, Matches, IsOptional } from "class-validator";
+import { IsString,IsInt, IsEmail, MinLength, MaxLength, Matches, IsOptional } from "class-validator";
 
 export class CreateUserDto {
 
   @IsString()
   @IsEmail()
   email: string;
+
+  @IsString()
+  @IsOptional()
+  plan: string = 'GRATIS';
+
+  @IsInt()
+  @IsOptional()
+  edad: number;
+
+  @IsInt()
+  @IsOptional()
+  peso: number;
+
+  @IsInt()
+  @IsOptional()
+  imc: number;
   
   @IsString()
   @MinLength(6)

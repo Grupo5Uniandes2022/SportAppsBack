@@ -4,7 +4,7 @@ import {JwtService} from '@nestjs/jwt';
 import {Repository} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { CreateUserDto, LoginUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto, LoginUserDto, SportUserDto } from './dto';
 import { User } from './entities/user.entity';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
@@ -24,7 +24,8 @@ export class AuthService {
       const {password, ...userData} = createUserDto;
       const user =this.userRepository.create({
         ...userData,
-        password: bcrypt.hashSync(password, 10)
+        password: bcrypt.hashSync(password, 10),
+        plan: 'GRATIS'
       });
       await this.userRepository.save(user);
       delete user.password;
@@ -36,6 +37,30 @@ export class AuthService {
       this.handleDbErrors(error)
     }
   }
+
+
+  async update(updateUserDto: UpdateUserDto, userLogin: User) {
+    try {
+      const user = this.userRepository.update(userLogin.id, updateUserDto);
+      return {
+        ...user,
+      };
+    } catch (error) {
+      this.handleDbErrors(error)
+    }
+  }
+
+  async updateSportInfo(sportUserDto: SportUserDto, userLogin: User) {
+    try {
+      const user = this.userRepository.update(userLogin.id, sportUserDto);
+      return {
+        ...user,
+      };
+    } catch (error) {
+      this.handleDbErrors(error)
+    }
+  }
+
 
   async login(loginUserDto:LoginUserDto){
       const {password, email} = loginUserDto;

@@ -44,4 +44,4 @@ jobs:
             -Dsonar.projectKey=Grupo5Uniandes2022_SportAppsBack
             -Dsonar.organization=grupo5uniandes2022
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
-            -Dsonar.typescript.tsconfigPaths=.tsconfig.json
+            -Dsonar.typescript.tsconfigPaths=tsconfig.json

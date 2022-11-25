@@ -14,6 +14,26 @@ export class User {
     unique: true
   })
   email: string;
+
+  @Column('text', {
+  default: 'GRATIS'
+  })
+  plan: string;
+
+  @Column('text', {
+  default: 0
+  })
+  edad: number;
+
+  @Column('text', {
+  default: 0
+  })
+  peso: number;
+
+  @Column('text', {
+  default: 0
+  })
+  imc: number;
   
   @Column('text',{
     select: false
