@@ -84,7 +84,7 @@
       "**/*.{!(module|entity),}.(t|j)s"
     ],
     "coveragePathIgnorePatterns": [
-      "../test"
+      "/test/"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
