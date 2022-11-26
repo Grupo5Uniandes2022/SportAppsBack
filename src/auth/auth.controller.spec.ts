@@ -31,21 +31,28 @@ describe('AuthController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-  /*
-  it('should create a user',() => {
+
+  it('should create a user', () => {
     const createSpy = jest.spyOn(authService, 'create');
-    controller.create({email:'test',fullName:'test',password:'test'});
+    controller.create({
+      email: 'test',
+      fullName: 'test',
+      password: 'test',
+      plan: '',
+      edad: 0,
+      peso: 0,
+      imc: 0,
+    });
     expect(createSpy).toHaveBeenCalled();
   });
-  it('should login a user',() => {
+  it('should login a user', () => {
     const loginSpy = jest.spyOn(authService, 'login');
-    controller.loginUser({email:'test',password:'test'});
+    controller.loginUser({ email: 'test', password: 'test' });
     expect(loginSpy).toHaveBeenCalled();
   });
-  it('should check user status',() => {
+  it('should check user status', () => {
     const checkSpy = jest.spyOn(authService, 'checkAuthStatus');
-    controller.checkAuthStatus(new User);
+    controller.checkAuthStatus(new User());
     expect(checkSpy).toHaveBeenCalled();
   });
-  */
 });
