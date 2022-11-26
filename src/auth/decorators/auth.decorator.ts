@@ -7,6 +7,7 @@ import { RoleProtected } from './role-protected.decorator';
 
 /* istanbul ignore next */
 export function Auth(...roles: ValidRoles[]) {
+  /* istanbul ignore next */
   return applyDecorators(
     RoleProtected(...roles),
     UseGuards(AuthGuard(), UserRoleGuard),
