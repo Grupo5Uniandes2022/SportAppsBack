@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { User } from '../../auth/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 

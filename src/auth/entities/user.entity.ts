@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Pay } from '../../pay/entities/pay.entity';
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, OneToMany} from 'typeorm';
 import { UserLimitation } from '../../user-limitations/entities/user-limitation.entity';

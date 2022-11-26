@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export const Food = {
   "vegano":{"desayuno":['tostadas'],"almuerzo": ['ensalada tailandesa'],"cena":['salteado de tofu']},
   "vegetariano":{"desayuno":['tomate cherry y aguacate'],"almuerzo":['brocoli y zanahoria'], "cena":['crema de calabacín de tofu']},
