@@ -8,51 +8,60 @@ import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
-
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
-    
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {
-    
-  }
+  ) {}
   async create(user: User, createEventDto: CreateEventDto) {
     const newEvent = await this.eventRepository.create(createEventDto);
     newEvent.user = user;
-    await    this.eventRepository.save(newEvent);
-    return {ok: true}
+    await this.eventRepository.save(newEvent);
+    return { ok: true };
   }
 
   async update(user: User, idEvento: string, updateEventDto: UpdateEventDto) {
-    const updateEvent = await this.eventRepository.update(idEvento, updateEventDto);
-    return {ok: true}
+    const updateEvent = await this.eventRepository.update(
+      idEvento,
+      updateEventDto,
+    );
+    return { ok: true };
   }
 
   async findAll(user: User) {
-    return  await (await this.eventRepository.find({relations:['user']})).filter(event => event.user.id === user.id);
-
+    return await (
+      await this.eventRepository.find({ relations: ['user'] })
+    ).filter((event) => event.user.id === user.id);
   }
 
-  async setAppointment(user: User, idDoctor: string, createEventDto: CreateEventDto){
+  async setAppointment(
+    user: User,
+    idDoctor: string,
+    createEventDto: CreateEventDto,
+  ) {
     createEventDto.title = `Appointment ${user.fullName}`;
-    const newEvent = await this.eventRepository.create(createEventDto)
-    const doctor = await this.userRepository.findOneBy({id: idDoctor});
-    if(doctor){
+    const newEvent = await this.eventRepository.create(createEventDto);
+    const doctor = await this.userRepository.findOneBy({ id: idDoctor });
+    if (doctor) {
       newEvent.user = doctor;
       await this.eventRepository.save(newEvent);
-      const newUserEvent = await this.eventRepository.create({...createEventDto,user,title: `Appointment ${doctor.fullName}` })
+      const newUserEvent = await this.eventRepository.create({
+        ...createEventDto,
+        user,
+        title: `Appointment ${doctor.fullName}`,
+      });
       await this.eventRepository.save(newUserEvent);
-      return {ok: true}
-    }    
-    return {ok: false}
-   }
+      return { ok: true };
+    }
+    return { ok: false };
+  }
 
-   async addEvents(user: User, eventNumber: number){
-    const states= ['appointment','free']; 
-    for(let i = 0; i < eventNumber ; i++){
-      const createDto = new CreateEventDto()
+  async addEvents(user: User, eventNumber: number) {
+    const states = ['appointment', 'free'];
+    for (let i = 0; i < eventNumber; i++) {
+      const createDto = new CreateEventDto();
       createDto.endDate = new Date();
       createDto.endDate.setDate(createDto.endDate.getDay() + i);
       createDto.startDate = new Date();
@@ -61,9 +70,7 @@ export class EventsService {
       createDto.duration = Math.floor(Math.random() * 10);
       createDto.distance = Math.floor(Math.random() * 10);
       createDto.title = createDto.type;
-      await this.create(user, createDto );
+      await this.create(user, createDto);
     }
-
-   }
- 
+  }
 }

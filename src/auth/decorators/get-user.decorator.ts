@@ -1,15 +1,19 @@
 /* istanbul ignore file */
-import { createParamDecorator, ExecutionContext, InternalServerErrorException } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 export const GetUser = createParamDecorator(
-  (data:string, ctx: ExecutionContext) => {
+  (data: string, ctx: ExecutionContext) => {
     const req = ctx.switchToHttp().getRequest();
     const user = req.user;
 
-    if(!user){
+    if (!user) {
       throw new InternalServerErrorException('User not found req');
     }
 
-   return (!data)? user: user[data];
-  }
-)
+    return !data ? user : user[data];
+  },
+);

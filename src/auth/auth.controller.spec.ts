@@ -10,15 +10,19 @@ describe('AuthController', () => {
   const mockAuthService = {
     create: jest.fn(),
     login: jest.fn(),
-    checkAuthStatus: jest.fn()
-  }
+    checkAuthStatus: jest.fn(),
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService, {provide: Auth, useValue: jest.fn().mockImplementation(()=>true)}],
+      providers: [
+        AuthService,
+        { provide: Auth, useValue: jest.fn().mockImplementation(() => true) },
+      ],
     })
-    .overrideProvider(AuthService).useValue(mockAuthService)
-    .compile();
+      .overrideProvider(AuthService)
+      .useValue(mockAuthService)
+      .compile();
 
     controller = module.get<AuthController>(AuthController);
     authService = module.get<AuthService>(AuthService);

@@ -10,20 +10,25 @@ export class UserLimitationsService {
   constructor(
     @InjectRepository(UserLimitation)
     private readonly userLimitationRepository: Repository<UserLimitation>,
-    
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ){}
-  async create(userId: string, createUserLimitationDto: CreateUserLimitationDto) {
+  ) {}
+  async create(
+    userId: string,
+    createUserLimitationDto: CreateUserLimitationDto,
+  ) {
     try {
-    const user = await this.userRepository.findOneBy({id: userId});
-    const newUserLimitation = await this.userLimitationRepository.create(createUserLimitationDto);
-    await this.userLimitationRepository.save(newUserLimitation);
-    user.userLimitation = newUserLimitation;
-    await  this.userRepository.save(user);
-      } catch (error) {
-        console.log(error);      
-      }
-    return {ok: true, message: 'Process completed'};
+      const user = await this.userRepository.findOneBy({ id: userId });
+      const newUserLimitation = await this.userLimitationRepository.create(
+        createUserLimitationDto,
+      );
+      await this.userLimitationRepository.save(newUserLimitation);
+      user.userLimitation = newUserLimitation;
+      await this.userRepository.save(user);
+    } catch (error) {
+      console.log(error);
+    }
+    return { ok: true, message: 'Process completed' };
   }
 }

@@ -9,11 +9,8 @@ import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserLimitation]),
-    AuthModule
-  ],
+  imports: [TypeOrmModule.forFeature([UserLimitation]), AuthModule],
   controllers: [UserLimitationsController],
-  providers: [UserLimitationsService]
+  providers: [UserLimitationsService],
 })
 export class UserLimitationsModule {}

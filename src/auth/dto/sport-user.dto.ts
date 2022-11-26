@@ -1,8 +1,15 @@
 /* istanbul ignore file */
-import { IsString, IsInt, IsEmail, MinLength, MaxLength, Matches, IsOptional } from "class-validator";
+import {
+  IsString,
+  IsInt,
+  IsEmail,
+  MinLength,
+  MaxLength,
+  Matches,
+  IsOptional,
+} from 'class-validator';
 
 export class SportUserDto {
-
   @IsInt()
   edad: number;
 
@@ -11,5 +18,4 @@ export class SportUserDto {
 
   @IsInt()
   imc: number;
-
 }

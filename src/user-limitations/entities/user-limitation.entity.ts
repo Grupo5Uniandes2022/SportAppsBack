@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class UserLimitation {
@@ -9,14 +9,13 @@ export class UserLimitation {
   @Column()
   alimentationType: string;
 
-  @Column('text',{
-    array: true
+  @Column('text', {
+    array: true,
   })
   alergies: string[];
 
-  @Column('text',{
-    array: true
+  @Column('text', {
+    array: true,
   })
   foodIntolerances: string[];
-
 }

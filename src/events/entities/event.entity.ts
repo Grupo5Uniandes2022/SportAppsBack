@@ -1,10 +1,9 @@
 /* istanbul ignore file */
-import { User } from "../../auth/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from '../../auth/entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Event {
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -28,5 +27,4 @@ export class Event {
 
   @ManyToOne(() => User, (user) => user.events)
   user: User;
-
 }

@@ -1,8 +1,7 @@
 /* istanbul ignore file */
-import { IsIn, IsString, MinLength } from "class-validator";
+import { IsIn, IsString, MinLength } from 'class-validator';
 
 export class CreateServiceDto {
-  
   @IsString()
   @MinLength(10)
   name: string;

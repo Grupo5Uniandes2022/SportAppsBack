@@ -20,13 +20,13 @@ export class PayController {
   }
   @Get('user')
   @Auth()
-  getUserPay(@GetUser() user: User){
+  getUserPay(@GetUser() user: User) {
     return this.payService.findUserPayment(user);
   }
 
   @Post('user')
   @Auth()
-  addUserPay(@GetUser() user: User, @Body() payTitle: AddPayDto){
-    return this.payService.addUserPayment(user,payTitle);
+  addUserPay(@GetUser() user: User, @Body() payTitle: AddPayDto) {
+    return this.payService.addUserPayment(user, payTitle);
   }
 }

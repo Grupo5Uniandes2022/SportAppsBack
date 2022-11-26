@@ -1,67 +1,73 @@
 /* istanbul ignore file */
 import { Pay } from '../../pay/entities/pay.entity';
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, OneToMany} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { UserLimitation } from '../../user-limitations/entities/user-limitation.entity';
 import { Event } from '../../events/entities/event.entity';
 
-
 @Entity('users')
 export class User {
-  
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('text', {
-    unique: true
+    unique: true,
   })
   email: string;
 
   @Column('text', {
-  default: 'GRATIS'
+    default: 'GRATIS',
   })
   plan: string;
 
   @Column('text', {
-  default: 0
+    default: 0,
   })
   edad: number;
 
   @Column('text', {
-  default: 0
+    default: 0,
   })
   peso: number;
 
   @Column('text', {
-  default: 0
+    default: 0,
   })
   imc: number;
-  
-  @Column('text',{
-    select: false
+
+  @Column('text', {
+    select: false,
   })
   password: string;
-  
+
   @Column('text')
   fullName: string;
-  
-  @Column('bool',{
-    default: true
+
+  @Column('bool', {
+    default: true,
   })
   isActive: boolean;
 
   @Column('text', {
     array: true,
-    default: ['user']
+    default: ['user'],
   })
   roles: string[];
 
-  @ManyToOne(()=> Pay, (pay) => pay.users)
+  @ManyToOne(() => Pay, (pay) => pay.users)
   pay: Pay;
 
   @OneToOne(() => UserLimitation)
   @JoinColumn()
   userLimitation: UserLimitation;
 
-  @OneToMany(() => Event, (event)=> event.user)
-  events: Event[]  
+  @OneToMany(() => Event, (event) => event.user)
+  events: Event[];
 }

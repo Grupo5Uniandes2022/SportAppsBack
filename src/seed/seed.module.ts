@@ -8,6 +8,6 @@ import { PayModule } from '../pay/pay.module';
 @Module({
   controllers: [SeedController],
   providers: [SeedService],
-  imports: [AuthModule, EventsModule, PayModule]
+  imports: [AuthModule, EventsModule, PayModule],
 })
 export class SeedModule {}

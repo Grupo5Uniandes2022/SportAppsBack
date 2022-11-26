@@ -7,16 +7,13 @@ import { Service } from './entities/service.entity';
 
 @Injectable()
 export class ServicesService {
-
   constructor(
     @InjectRepository(Service)
     private readonly serviceRepository: Repository<Service>,
-    
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {
-    
-  }
+  ) {}
 
   async create(user: User, createServiceDto: CreateServiceDto) {
     const newService = await this.serviceRepository.create(createServiceDto);

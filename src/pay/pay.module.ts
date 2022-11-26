@@ -6,12 +6,9 @@ import { Pay } from './entities/pay.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Pay]),
-    AuthModule
-  ],
+  imports: [TypeOrmModule.forFeature([Pay]), AuthModule],
   controllers: [PayController],
   providers: [PayService],
-  exports: [PayService]
+  exports: [PayService],
 })
 export class PayModule {}

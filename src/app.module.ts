@@ -20,7 +20,7 @@ import { LivenessModule } from './liveness/liveness.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
-      synchronize: true //No Usar en prod, en prod hay migraciones
+      synchronize: true, //No Usar en prod, en prod hay migraciones
     }),
     AuthModule,
     PayModule,
