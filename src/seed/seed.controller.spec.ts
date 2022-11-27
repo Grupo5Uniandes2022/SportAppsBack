@@ -7,8 +7,7 @@ describe('SeedController', () => {
   let service: SeedService;
 
   const mockService = {
-    findAll: jest.fn(),
-    create: jest.fn(),
+    executeSeed: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -30,5 +29,11 @@ describe('SeedController', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should executeSeed', () => {
+    const executeSeed = jest.spyOn(service, 'executeSeed');
+    controller.executeSeed();
+    expect(executeSeed).toHaveBeenCalled();
   });
 });

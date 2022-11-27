@@ -31,4 +31,54 @@ describe('EventsController', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('should find all', () => {
+    const findSpy = jest.spyOn(service, 'findAll');
+    controller.findAll({
+      email: 'test',
+      fullName: 'test',
+      password: 'test',
+      plan: '',
+      edad: 0,
+      peso: 0,
+      imc: 0,
+      id: '',
+      isActive: false,
+      roles: [],
+      pay: null,
+      userLimitation: null,
+      events: [],
+    });
+    expect(findSpy).toHaveBeenCalled();
+  });
+
+  it('create Events', () => {
+    const createSpy = jest.spyOn(service, 'create');
+    controller.create(
+      {
+        email: 'test',
+        fullName: 'test',
+        password: 'test',
+        plan: '',
+        edad: 0,
+        peso: 0,
+        imc: 0,
+        id: '',
+        isActive: false,
+        roles: [],
+        pay: null,
+        userLimitation: null,
+        events: [],
+      },
+      {
+        startDate: undefined,
+        endDate: undefined,
+        title: '',
+        type: '',
+        duration: 0,
+        distance: 0,
+      },
+    );
+    expect(createSpy).toHaveBeenCalled();
+  });
 });
