@@ -28,6 +28,10 @@ describe('PayController', () => {
     expect(controller).toBeDefined();
   });
 
+  it('should be defined', () => {
+    expect(payService).toBeDefined();
+  });
+
   it('should find all', () => {
     const findSpy = jest.spyOn(payService, 'findAll');
     controller.findAll();

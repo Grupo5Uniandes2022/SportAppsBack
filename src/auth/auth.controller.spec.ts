@@ -32,6 +32,10 @@ describe('AuthController', () => {
     expect(controller).toBeDefined();
   });
 
+  it('should be defined', () => {
+    expect(authService).toBeDefined();
+  });
+
   it('should create a user', () => {
     const createSpy = jest.spyOn(authService, 'create');
     controller.create({
